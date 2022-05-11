@@ -8,7 +8,6 @@ quantity_img=480
 #train
 train_all=np.zeros((480*5,size[0]*n))
 for a in range(0,5):
-    quantity_img=480
     path="D:/Chuyen_de/Dataset/"+str(lables[a])+"_all/train/"+str(lables[a])+"_gray/"
     X=fun.load_data(path,quantity_img,size)
     rows,colums=X.shape

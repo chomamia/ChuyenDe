@@ -3,7 +3,7 @@ import cv2
 from scipy.linalg import eigh
 
 def load_data(path,quantity_img,size):
-    X=np.zeros((quantity_img,size[0]*size[1]))
+    X=np.zeros((quantity_img,size[0]*size[1]),dtype=int)
     for i in range(0,quantity_img):
         img=cv2.imread(path+str(i)+".jpeg")
         img=img[:,:,1]
