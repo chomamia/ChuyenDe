@@ -5,10 +5,12 @@ from scipy.linalg import eigh
 
 
 def load_data(path):
-    print("Step 1/3: Loading data...")
+    print("\nStep 1/3: Loading data...")
     class_input = os.listdir(path)
     num_image = 0
     X = np.array([])
+    label = 1
+    Y = np.array([])
     for c in class_input:
         for i in os.listdir(path+"/"+c):
             path_img = path + "/" + c + "/" + i
@@ -16,15 +18,19 @@ def load_data(path):
             img = np.reshape(img[:, :, 1], (1, -1))
             if len(X) == 0:
                 X = [img[0, :]]
+                Y = [label]
             else:
                 X = np.concatenate((X, [img[0, :]]), axis=0)
+                Y = np.concatenate((Y, [label]), axis=0)
 
-    print("\nDone! \nShape of data: ", X.shape)
-    return X
+        label += 1
+
+    print("Done! \nShape of data: ", X.shape)
+    return X, Y
 
 
 def PCA_fn(data_input, n_component):
-    print("Step 2/3: PCA feature extraction...")
+    print("\nStep 2/3: PCA feature extraction...")
     n, size = data_input.shape
     PCA = np.array([])
     for i in range(n):
@@ -56,12 +62,12 @@ def PCA_fn(data_input, n_component):
         else:
             PCA = np.concatenate((PCA, [coordinate[0, :]]), axis=0)
 
-    print("\nDone!!! \nShape of PCA feature: ", PCA.shape)
+    print("Done!!! \nShape of PCA feature: ", PCA.shape)
     return PCA
 
 
 def HOG_fn(data_input):
-    print("Step 3/3: HOG feature extraction...")
+    print("\nStep 3/3: HOG feature extraction...")
     n, size = data_input.shape
     HOG = np.array([])
     for i in range(n):
@@ -82,7 +88,7 @@ def HOG_fn(data_input):
         else:
             HOG = np.concatenate((HOG, [block[0, :]]), axis=0)
 
-    print("\nDone!!! \nShape of HOG feature: ", HOG.shape)
+    print("Done!!! \nShape of HOG feature: ", HOG.shape)
     return HOG
 
 

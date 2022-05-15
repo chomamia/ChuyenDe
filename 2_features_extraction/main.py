@@ -13,8 +13,9 @@ if __name__ == "__main__":
     if not os.path.exists(PATH_SAVE_MODEL):
         os.mkdir(PATH_SAVE_MODEL)
 
-    data = load_data(PATH_DATA)
-    np.savetxt(PATH_SAVE_MODEL+"/data.txt", data)
+    data, label = load_data(PATH_DATA)
+    np.savetxt(PATH_SAVE_MODEL + "/data.txt", data)
+    np.savetxt(PATH_SAVE_MODEL + "/label.txt", label)
 
     PCA_feature = PCA_fn(data, N_COMPONENT)
     np.savetxt(PATH_SAVE_MODEL + "/PCA_feature.txt", PCA_feature)
