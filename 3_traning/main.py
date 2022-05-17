@@ -2,14 +2,14 @@ from unittest import result
 from modules_training import *
 
 # HOG
-HOG_C = 10
+HOG_C = 20
 HOG_C_DEGREE = 2
 HOG_C_GAMMA = 10
 HOG_C_KERNEL = 'poly'    # 'rbf' or 'linear' or 'poly'
 
 # PCA
-PCA_C = 10
-PCA_C_DEGREE = 2
+PCA_C = 20
+PCA_C_DEGREE = 1
 PCA_C_GAMMA = 10
 PCA_C_KERNEL = 'rbf'    # 'rbf' or 'linear' or 'poly'
 
@@ -30,6 +30,6 @@ if __name__ == "__main__":
                                                c_kernel=PCA_C_KERNEL, c_degree=PCA_C_DEGREE, c_gamma=PCA_C_GAMMA, c=PCA_C)
     print("SVM - PCA: {:.2%}".format(svm_pca_accuracy))
 
-    result_SVM_HOG = [str(x)+"/" for x in [svm_hog_accuracy*100, HOG_C_KERNEL, HOG_C_DEGREE, HOG_C_GAMMA, HOG_C]]
-    result_SVM_PCA = [str(x)+"/" for x in [PCA_C_KERNEL, PCA_C_DEGREE, PCA_C_GAMMA, PCA_C, svm_pca_accuracy]]
+    result_SVM_HOG = [str(x)+" " for x in [svm_hog_accuracy*100, HOG_C_KERNEL, HOG_C_DEGREE, HOG_C_GAMMA, HOG_C]]
+    result_SVM_PCA = [str(x)+" " for x in [svm_pca_accuracy*100, PCA_C_KERNEL, PCA_C_DEGREE, PCA_C_GAMMA, PCA_C]]
     save_result_train(PATH_SAVE_RESULT_TRAIN, result_SVM_HOG, result_SVM_PCA)
