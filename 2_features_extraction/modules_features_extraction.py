@@ -20,7 +20,7 @@ def load_data(path):
                 X = [img[0, :]]
                 Y = [label]
             else:
-                X = np.concatenate((X, [img[0, :]]), axis=0)
+                X = np.concatenate((X, [img[0, :]]), axis=0, dtype=float)
                 Y = np.concatenate((Y, [label]), axis=0)
 
         label += 1

@@ -5,8 +5,8 @@ from modules_pre_processing import *
 TRAIN_RATIO = 0.8
 BUFFER_IMAGE = 50   # white border around image
 SIZE_IMAGE = [64, 64]
-PATH_DATA_ORIGIN = "../dataset/data_origin"
-PATH_DATA_ARGUMENT = "../dataset/data_argument"
+PATH_DATA_ORIGIN = "../../dataset/data_origin"
+PATH_DATA_ARGUMENT = "../../dataset/data_argument"
 
 if __name__ == "__main__":
     # chia data train va test

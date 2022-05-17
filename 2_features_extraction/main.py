@@ -3,11 +3,11 @@ from modules_features_extraction import *
 N_COMPONENT = 3  # using for PCA
 
 # # # train # # #
-# PATH_DATA = "../dataset/data_argument_(80.0-20.0)/train/gray"
-# PATH_SAVE_MODEL = "../output_data_train"
+PATH_DATA = "../../dataset/data_argument_(80.0-20.0)/train/gray"
+PATH_SAVE_MODEL = "../../output_data_train"
 # # # test # # #
-PATH_DATA = "../dataset/data_argument_(80.0-20.0)/test/gray"
-PATH_SAVE_MODEL = "../output_data_test"
+# PATH_DATA = "../../dataset/data_argument_(80.0-20.0)/test/gray"
+# PATH_SAVE_MODEL = "../../output_data_test"
 
 if __name__ == "__main__":
     if not os.path.exists(PATH_SAVE_MODEL):
