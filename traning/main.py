@@ -30,6 +30,9 @@ if __name__ == "__main__":
                                                c_kernel=PCA_C_KERNEL, c_degree=PCA_C_DEGREE, c_gamma=PCA_C_GAMMA, c=PCA_C)
     print("SVM - PCA: {:.2%}".format(svm_pca_accuracy))
 
+    ANN(X_HOG_train, Y_train)
+
     result_SVM_HOG = [str(x)+" " for x in [svm_hog_accuracy*100, HOG_C_KERNEL, HOG_C_DEGREE, HOG_C_GAMMA, HOG_C]]
     result_SVM_PCA = [str(x)+" " for x in [svm_pca_accuracy*100, PCA_C_KERNEL, PCA_C_DEGREE, PCA_C_GAMMA, PCA_C]]
+
     save_result_train(PATH_SAVE_RESULT_TRAIN, result_SVM_HOG, result_SVM_PCA)
