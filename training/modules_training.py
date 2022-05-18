@@ -1,8 +1,10 @@
 
+from datetime import datetime
 import os
+import pickle
+from datetime import datetime
 import numpy as np
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
 
 
 def load_feature(path):
@@ -53,7 +55,7 @@ def y_Vec(num_labels, y):
     return yy
 
 
-def CostFunction(nn_params, input_layer_size, hidden_layer1_size, hidden_layer2_size
+def nncnnCostFunction(nn_params, input_layer_size, hidden_layer1_size, hidden_layer2_size
                       , hidden_layer3_size, num_labels, X, y, lamb):
 
     theta1 = np.reshape(nn_params[0: hidden_layer1_size * (input_layer_size + 1)],
@@ -152,14 +154,16 @@ def ANN(X_train, y_train):
     hidden_layer2_size = 32
     hidden_layer3_size = 16
     number_labels = 5
+
     theta1 = randInitializeWeights(input_layer_size, hidden_layer1_size)
     theta2 = randInitializeWeights(hidden_layer1_size, hidden_layer2_size)
     theta3 = randInitializeWeights(hidden_layer2_size, hidden_layer3_size)
     theta4 = randInitializeWeights(hidden_layer3_size, number_labels)
+
     init_nn_params = np.concatenate((np.reshape(theta1, theta1.size, order = 'F'), np.reshape(theta2, theta2.size, order = 'F'),
                                      np.reshape(theta3, theta3.size, order = 'F'), np.reshape(theta4, theta4.size, order = 'F')))
     y = y_train
-    y_train = y_Vec(5, y_train)
+    y_train = y_Vec(number_labels, y_train)
     cost = lambda x: nncnnCostFunction(x, input_layer_size, hidden_layer1_size, hidden_layer2_size,
                                        hidden_layer3_size, number_labels, X_train, y_train, lamb=1)[0]
     grad = lambda x: nncnnCostFunction(x, input_layer_size, hidden_layer1_size, hidden_layer2_size,
@@ -181,14 +185,19 @@ def ANN(X_train, y_train):
     return p
 
 
-def SVM_fn(X_train, Y_train, X_test, Y_test, c_kernel='poly', c_degree=2, c_gamma=10, c=10):
+def SVM_fn(X_train, Y_train, filename,  c_kernel='poly', c_degree=2, c_gamma=10, c=10):
     print("\nTraining ...")
     print("kernel = ", c_kernel)
     svm = SVC(kernel=c_kernel, degree=c_degree, gamma=c_gamma, C=c, probability=True)
     svm.fit(X_train, Y_train)
-    Y_predict = svm.predict(X_test)
-    accuracy = accuracy_score(Y_test, Y_predict)
-    return Y_predict, accuracy
+
+    # save the model to disk
+    filename = filename + str(datetime.now()).replace(":", "_")+".sav"
+    pickle.dump(svm, open(filename, 'wb'))
+
+    print("Successful! Mode save at: "+os.path.abspath(filename))
+    return(svm)
+
 
 def save_result_train(path, result_svm_hog, result_svm_pca):
     if not os.path.exists(path):
