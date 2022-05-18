@@ -3,11 +3,9 @@ import numpy as np
 import function as fun
 import matplotlib.pyplot as plt
 lables=["eggplant", "carot","brocoli","potato","tomato"]
-lables_y=np.loadtxt("D:/Chuyen_de/Dataset/pca_sklearn/y_train1.txt", delimiter=",")
-print(lables_y)
 
 n=50
-size=np.array([25,25])
+size=np.array([32,32])
 quantity_img=480
 train_all=np.zeros((quantity_img*(len(lables)),size[0]*size[1]))
 #load data
@@ -21,7 +19,7 @@ print(train_all.shape)
 pca = decomposition.PCA(n_components=n)
 pca_data = pca.fit_transform(train_all)
 print(pca_data.shape)
-np.savetxt("D:/Chuyen_de/Dataset/pca_sklearn/fix/X_train1.txt", pca_data, delimiter=",")
+np.savetxt("D:/Chuyen_de/Dataset/pca_sklearn/fix/X_train1.txt", pca_data)
 # plt.style.use('seaborn-whitegrid')
 # plt.figure(figsize = (10,6))
 # c_map = plt.cm.get_cmap('jet', 5)
@@ -43,5 +41,5 @@ print(test_all.shape)
 pca = decomposition.PCA(n_components=n)
 pca_data = pca.fit_transform(test_all)
 print(pca_data.shape)
-np.savetxt("D:/Chuyen_de/Dataset/pca_sklearn/fix/X_test1.txt", pca_data, delimiter=",")
+np.savetxt("D:/Chuyen_de/Dataset/pca_sklearn/fix/X_test1.txt", pca_data)
 

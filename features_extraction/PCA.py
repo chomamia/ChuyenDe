@@ -4,7 +4,7 @@ import function as fun
 lables=["eggplant", "carot", "brocoli", "potato", "tomato"]
 #train
 n=10
-size=np.array([64,64])
+size=np.array([32,32])
 quantity_img=480
 train_all=np.zeros((quantity_img*(len(lables)),size[0]*n))
 for a in range(0,5):
@@ -17,7 +17,7 @@ for a in range(0,5):
         pca_img=fun.PCA(img,n)
         data[i,:]=np.reshape(pca_img,(1,size[0]*n))
     train_all[quantity_img*a:quantity_img*a+quantity_img,:]=data
-np.savetxt("D:/Chuyen_de/Dataset/X_train.txt",train_all,delimiter=",")
+np.savetxt("D:/Chuyen_de/Dataset/pca/X_train.txt",train_all)
 print(train_all.shape)
 #test
 quantity_img = 120
@@ -33,6 +33,6 @@ for a in range(0,5):
         pca_img=fun.PCA(img,n)
         data[i,:]=np.reshape(pca_img,(1,size[0]*n))
     test_all[quantity_img*a:quantity_img*a+quantity_img,:]=data
-np.savetxt("D:/Chuyen_de/Dataset/X_test.txt",test_all,delimiter=",")
+np.savetxt("D:/Chuyen_de/Dataset/pca/X_test.txt", test_all)
 print(test_all.shape)
 #label

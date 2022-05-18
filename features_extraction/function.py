@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 from scipy.linalg import eigh
+from scipy import linalg
 
 
 labels = ["eggplant", "carot", "brocoli", "potato", "tomato"]
@@ -21,7 +22,13 @@ def PCA(X,n):
     # tieu chuan hoa du lieu
     mean_X = np.mean(X)
     X = (X - mean_X) / np.std(X)
-    X = X-np.min(X)
+    N = X.shape[1]
+    x = np.zeros((X.shape[0]))
+    for i in range(0, N):
+        x = x + 1/N * X[:, i]
+    for i in range(0 , N):
+        X[:, i] = X[:, i] - x
+    # X = X-np.min(X)
     # tinh toan ma tran hiep phuong sai
     covar_matrix = np.cov(X)
     # tinh toan cac gia tri rieng va cac gia tri rieeng cua ma tran hiep phuong sai

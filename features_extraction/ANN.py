@@ -2,10 +2,13 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import fmin_cg
-
-
-X_train = np.loadtxt("D:/Chuyen_de/Dataset/hog/X_train_1.txt", dtype=float)
-X_test = np.loadtxt("D:/Chuyen_de/Dataset/hog/X_test_1.txt", dtype=float)
+import pandas as pd
+# hog
+# X_train = np.loadtxt("D:/Chuyen_de/Dataset/hog/X_train_1.txt")
+# X_test = np.loadtxt("D:/Chuyen_de/Dataset/hog/X_test_1.txt")
+# pca
+X_train = np.loadtxt("D:/Chuyen_de/Dataset/pca_sklearn/X_train.txt")
+X_test = np.loadtxt("D:/Chuyen_de/Dataset/pca_sklearn/X_test.txt")
 y_train = np.loadtxt("D:/Chuyen_de/Dataset/pca_sklearn/y_train1.txt", dtype=int, delimiter=",")
 y_test = np.loadtxt("D:/Chuyen_de/Dataset/pca_sklearn/y_test1.txt", dtype=int, delimiter=",")
 print("X_train:", X_train.shape)
@@ -19,6 +22,7 @@ def randInitializeWeights(L_in, L_out):
     eps = np.sqrt(6) / (np.sqrt(L_in) + np.sqrt(L_out))
     w = - eps + np.random.rand(L_out, L_in+1) * 2 * eps
     return w
+
 
 def computeNumericalGradient(J, theta):
     numgrad = np.zeros(len(theta))
@@ -39,6 +43,10 @@ def sigmoid(z):
     g = 1 / (1 + np.exp(-z))
     return g
 
+
+def softmax(z):
+    g = np.exp(z) / np.sum(np.exp(z))
+    return g
 
 def sigmoidGradient(z):
     dg = sigmoid(z) * (1 - sigmoid(z))
@@ -63,7 +71,7 @@ def nncnnCostFunction(nn_params, input_layer_size, hidden_layer1_size, hidden_la
                         (hidden_layer3_size, hidden_layer2_size+1), order='F')
     theta4 = np.reshape(nn_params[ a + hidden_layer3_size * (hidden_layer2_size+1): a + hidden_layer3_size * (hidden_layer2_size + 1)+(hidden_layer3_size+1)*num_labels],
                         (num_labels, hidden_layer3_size +1), order='F')
-    eps = 1e-5
+    eps = 1e-15
     m = X.shape[0]
     theta1_grad = np.zeros(theta1.shape)
     theta2_grad = np.zeros(theta2.shape)
@@ -143,12 +151,8 @@ def predict(theta1, theta2, theta3, theta4, X):
     return p
 
 
-def ANN(X_train, y_train):
-    input_layer_size = 1764
-    hidden_layer1_size = 128
-    hidden_layer2_size = 32
-    hidden_layer3_size = 16
-    number_labels = 5
+def ANN(X_train, y_train, input_layer_size, hidden_layer1_size, hidden_layer2_size, hidden_layer3_size, number_labels ):
+
     theta1 = randInitializeWeights(input_layer_size, hidden_layer1_size)
     theta2 = randInitializeWeights(hidden_layer1_size, hidden_layer2_size)
     theta3 = randInitializeWeights(hidden_layer2_size, hidden_layer3_size)
@@ -156,13 +160,13 @@ def ANN(X_train, y_train):
     init_nn_params = np.concatenate((np.reshape(theta1, theta1.size, order = 'F'), np.reshape(theta2, theta2.size, order = 'F'),
                                      np.reshape(theta3, theta3.size, order = 'F'), np.reshape(theta4, theta4.size, order = 'F')))
     y = y_train
-    y_train = y_Vec(5, y_train)
+    y_train = y_Vec(number_labels, y_train)
     cost = lambda x: nncnnCostFunction(x, input_layer_size, hidden_layer1_size, hidden_layer2_size,
                                        hidden_layer3_size, number_labels, X_train, y_train, lamb=1)[0]
     grad = lambda x: nncnnCostFunction(x, input_layer_size, hidden_layer1_size, hidden_layer2_size,
                                        hidden_layer3_size, number_labels, X_train, y_train, lamb=1)[1]
 
-    nn_params = fmin_cg(cost, init_nn_params, fprime=grad, maxiter=1764, disp=False)
+    nn_params = fmin_cg(cost, init_nn_params, fprime=grad, maxiter=500, disp=False)
     theta1 = np.reshape(nn_params[0: hidden_layer1_size * (input_layer_size + 1)],
                         (hidden_layer1_size, input_layer_size+1), order='F')
     theta2 = np.reshape(nn_params[hidden_layer1_size * (input_layer_size + 1): hidden_layer1_size * (input_layer_size + 1 ) + hidden_layer2_size * (hidden_layer1_size+1)],
@@ -172,10 +176,10 @@ def ANN(X_train, y_train):
                         (hidden_layer3_size, hidden_layer2_size + 1), order='F')
     theta4 = np.reshape(nn_params[a + hidden_layer3_size * (hidden_layer2_size+1): a + hidden_layer3_size * (hidden_layer2_size + 1)+(hidden_layer3_size+1) * number_labels],
                         (number_labels, hidden_layer3_size + 1), order='F')
-    
+
     p = predict(theta1, theta2, theta3, theta4, X_test)
     print('Training set Accuracy: %2.2f ' % (np.mean(p +1 == y_test) * 100)+"%")
     return p
 
-p = ANN(X_train, y_train)
+p = ANN(X_train, y_train, X_train.shape[1], 128, 64, 30, 5)
 np.savetxt("accuracy.txt", p)

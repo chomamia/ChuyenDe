@@ -2,8 +2,8 @@ from sklearn import decomposition
 import numpy as np
 import function as fun
 lables=["eggplant", "carot","brocoli","potato","tomato"]
-n=2
-size=np.array([25,25])
+n=10
+size=np.array([32,32])
 quantity_img=480
 #train
 train_all=np.zeros((480*5,size[0]*n))
@@ -18,7 +18,7 @@ for a in range(0,5):
         pca_data = pca_img.fit_transform(img)
         data[i, :] = np.reshape(pca_data, (1, size[0]*n))
     train_all[480*a:480*a+480,:]=data
-np.savetxt("D:/Chuyen_de/Dataset/pca_sklearn/X_train.txt",train_all,delimiter=",")
+np.savetxt("D:/Chuyen_de/Dataset/pca_sklearn/X_train.txt",train_all)
 print(train_all.shape)
 #test
 quantity_img=120
@@ -35,5 +35,5 @@ for a in range(0,5):
         pca_data = pca_img.fit_transform(img)
         data[i, :] = np.reshape(pca_data, (1, size[0]*n))
     test_all[120*a:120*a+120,:]=data
-np.savetxt("D:/Chuyen_de/Dataset/pca_sklearn/X_test.txt",test_all,delimiter=",")
+np.savetxt("D:/Chuyen_de/Dataset/pca_sklearn/X_test.txt",test_all)
 print(test_all.shape)
