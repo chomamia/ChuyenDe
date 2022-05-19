@@ -51,7 +51,7 @@ def sigmoidGradient(z):
 def y_Vec(num_labels, y):
     yy = np.zeros((len(y), num_labels))
     for i in range(yy.shape[0]):
-        yy[i, y[i]-1] = 1
+        yy[i, int(y[i])-1] = 1
     return yy
 
 
@@ -148,13 +148,9 @@ def predict(theta1, theta2, theta3, theta4, X):
     return p
 
 
-def ANN(X_train, y_train):
-    input_layer_size = 1764
-    hidden_layer1_size = 128
-    hidden_layer2_size = 32
-    hidden_layer3_size = 16
-    number_labels = 5
+def ANN(X_train, y_train, hidden_layer1_size, hidden_layer2_size, hidden_layer3_size, number_labels):
 
+    input_layer_size = X_train.shape[1]
     theta1 = randInitializeWeights(input_layer_size, hidden_layer1_size)
     theta2 = randInitializeWeights(hidden_layer1_size, hidden_layer2_size)
     theta3 = randInitializeWeights(hidden_layer2_size, hidden_layer3_size)
@@ -169,7 +165,7 @@ def ANN(X_train, y_train):
     grad = lambda x: nncnnCostFunction(x, input_layer_size, hidden_layer1_size, hidden_layer2_size,
                                        hidden_layer3_size, number_labels, X_train, y_train, lamb=1)[1]
 
-    nn_params = fmin_cg(cost, init_nn_params, fprime=grad, maxiter=1764, disp=False)
+    nn_params = fmin_cg(cost, init_nn_params, fprime=grad, maxiter=500, disp=False)
     theta1 = np.reshape(nn_params[0: hidden_layer1_size * (input_layer_size + 1)],
                         (hidden_layer1_size, input_layer_size+1), order='F')
     theta2 = np.reshape(nn_params[hidden_layer1_size * (input_layer_size + 1): hidden_layer1_size * (input_layer_size + 1 ) + hidden_layer2_size * (hidden_layer1_size+1)],
@@ -180,9 +176,9 @@ def ANN(X_train, y_train):
     theta4 = np.reshape(nn_params[a + hidden_layer3_size * (hidden_layer2_size+1): a + hidden_layer3_size * (hidden_layer2_size + 1)+(hidden_layer3_size+1) * number_labels],
                         (number_labels, hidden_layer3_size + 1), order='F')
     
-    p = predict(theta1, theta2, theta3, theta4, X_test)
-    print('Training set Accuracy: %2.2f ' % (np.mean(p +1 == y_test) * 100)+"%")
-    return p
+    # p = predict(theta1, theta2, theta3, theta4, X_test)
+    # print('Training set Accuracy: %2.2f ' % (np.mean(p +1 == y_test) * 100)+"%")
+    return theta1, theta2, theta3, theta4
 
 
 def SVM_fn(X_train, Y_train, filename,  c_kernel='poly', c_degree=2, c_gamma=10, c=10):

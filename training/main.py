@@ -13,6 +13,14 @@ PCA_C_DEGREE = 1
 PCA_C_GAMMA = 10
 PCA_C_KERNEL = 'rbf'    # 'rbf' or 'linear' or 'poly'
 
+# ANN
+HIDDEN_LAYER_1_SIZE = 128
+HIDDEN_LAYER_2_SIZE = 64 
+HIDDEN_LAYER_3_SIZE = 20 
+NUM_LABELS = 5
+
+
+
 # PATH
 PATH_DATA_TRAIN = "../../output_data_train"
 PATH_DATA_TEST = "../../output_data_test"
@@ -41,8 +49,10 @@ if __name__ == "__main__":
     print("SVM - PCA: {:.2%}".format(accuracy))
     result_SVM_PCA = [str(x)+" " for x in [accuracy*100, PCA_C_KERNEL, PCA_C_DEGREE, PCA_C_GAMMA, PCA_C]]
 
-    # ANN -HOG
-    model = ANN(X_HOG_train, Y_train)
+    # ANN - HOG
+    theta1, theta2, theta3, theta4 = ANN(X_HOG_train, Y_train, HIDDEN_LAYER_1_SIZE, HIDDEN_LAYER_2_SIZE, HIDDEN_LAYER_3_SIZE, NUM_LABELS)
+    p = predict(theta1, theta2, theta3, theta4, X_HOG_test)
+    print('Training set Accuracy: %2.2f ' % (np.mean(p +1 == Y_test) * 100)+"%")
     
 
 
