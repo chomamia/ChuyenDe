@@ -5,6 +5,7 @@ import pickle
 from datetime import datetime
 import numpy as np
 from sklearn.svm import SVC
+from scipy.optimize import fmin_cg
 
 
 def load_feature(path):

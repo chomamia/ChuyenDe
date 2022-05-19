@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-
 # rotation image
 def rotation_fn(img, path_output):
     if len(img.shape) == 2:
