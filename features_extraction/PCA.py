@@ -4,7 +4,7 @@ import function as fun
 lables=["eggplant", "carot", "brocoli", "potato", "tomato"]
 #train
 n=10
-size=np.array([32,32])
+size=np.array([25,25])
 quantity_img=480
 train_all=np.zeros((quantity_img*(len(lables)),size[0]*n))
 for a in range(0,5):

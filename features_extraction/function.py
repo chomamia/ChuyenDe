@@ -18,28 +18,25 @@ def load_data(path, quantity_img, size):
     return X
 
 
-def PCA(X,n):
+def PCA(X, num_components):
     # tieu chuan hoa du lieu
-    mean_X = np.mean(X)
-    X = (X - mean_X) / np.std(X)
-    N = X.shape[1]
-    x = np.zeros((X.shape[0]))
-    for i in range(0, N):
-        x = x + 1/N * X[:, i]
-    for i in range(0 , N):
-        X[:, i] = X[:, i] - x
-    # X = X-np.min(X)
+    #step1
+    mean_X = np.mean(X, axis=0)
+    X_meaned = (X - mean_X)
+    #step2
     # tinh toan ma tran hiep phuong sai
-    covar_matrix = np.cov(X)
+    covar_matrix = np.cov(X_meaned, rowvar=False)
+    #step3
     # tinh toan cac gia tri rieng va cac gia tri rieeng cua ma tran hiep phuong sai
-    values, vectors = eigh(covar_matrix, eigvals=(1, n))
-    # tim duoc vector ring
-    vectors = vectors.T
-    # du lieu chinh la toa do cua cac diem tren khong gian moi
-    new_coordinates = np.dot(vectors, X.T)
-    new_coordinates = new_coordinates.T
-    return new_coordinates
-
+    values, vectors = eigh(covar_matrix)
+    sorted_index = np.argsort(values)[::-1]
+    sorted_eigenvalue = values[sorted_index]
+    sorted_eigenvectors = vectors[:, sorted_index]
+    #step5
+    eigenvector_subset = sorted_eigenvectors[:, 0:num_components]
+    #step6
+    X_reduced = np.dot(eigenvector_subset.T, X_meaned.T).T
+    return X_reduced
 
 def create_labels(num):
     labels = np.zeros((num * 5, 5), dtype=int)

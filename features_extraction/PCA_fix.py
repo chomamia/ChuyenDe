@@ -4,7 +4,7 @@ import function as fun
 import matplotlib.pyplot as plt
 lables=["eggplant", "carot","brocoli","potato","tomato"]
 
-n=50
+n=64
 size=np.array([32,32])
 quantity_img=480
 train_all=np.zeros((quantity_img*(len(lables)),size[0]*size[1]))

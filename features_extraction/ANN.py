@@ -1,3 +1,5 @@
+import csv
+
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -22,7 +24,6 @@ def randInitializeWeights(L_in, L_out):
     eps = np.sqrt(6) / (np.sqrt(L_in) + np.sqrt(L_out))
     w = - eps + np.random.rand(L_out, L_in+1) * 2 * eps
     return w
-
 
 def computeNumericalGradient(J, theta):
     numgrad = np.zeros(len(theta))

@@ -2,7 +2,7 @@ from sklearn import decomposition
 import numpy as np
 import function as fun
 lables=["eggplant", "carot","brocoli","potato","tomato"]
-n=10
+n=2
 size=np.array([32,32])
 quantity_img=480
 #train
