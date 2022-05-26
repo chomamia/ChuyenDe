@@ -1,4 +1,5 @@
 import os
+from tkinter.tix import X_REGION
 import cv2
 import numpy as np
 from scipy.linalg import eigh
@@ -32,35 +33,36 @@ def load_data(path):
 def PCA_fn(data_input, n_component):
     print("\nStep 2/3: PCA feature extraction...")
     n, size = data_input.shape
-    PCA = np.array([])
+    PCA = np.array([], dtype=float)
     for i in range(n):
         # Print process
         print_loading(i, n, 10)
 
         # tieu chuan hoa du lieu
         X = np.reshape(data_input[i, :], [int(size**(1/2)), int(size**(1/2))])
+        component_col = n_component // X.shape[0] + 1
         mean_X = np.mean(X)
-        X = (X - mean_X) / np.std(X)
-        X = X - np.min(X)
+        X_meaned = (X - mean_X) 
 
         # tinh toan ma tran hiep phuong sai
-        covar_matrix = np.cov(X)
+        covar_matrix = np.cov(X_meaned, rowvar=False)
 
         # tinh toan cac gia tri rieng va cac gia tri rieng cua ma tran hiep phuong sai
-        values, vectors = eigh(covar_matrix, eigvals=(1, n_component))
+        values, vectors = eigh(covar_matrix)
+        sorted_index = np.argsort(values)[::-1]
+        sorted_eigenvectors = vectors[:, sorted_index]
 
-        # tim duoc vector rieng
-        vectors = vectors.T
+        eigenvector_subnet = sorted_eigenvectors[:, 0:component_col]
 
-        # du lieu chinh la toa do cua cac diem tren khong gian moi
-        coordinate = np.dot(vectors, X.T)
-        coordinate = coordinate.T
-        coordinate = np.reshape(coordinate, [1, -1])
-        # print(coordinate.shape)
+        X_reduced = np.dot(eigenvector_subnet.T, X_meaned).T
+        X_reduced = np.reshape(X_reduced, (1,-1))
+
+        coordinate = X_reduced[:, 0:n_component]
+
         if len(PCA) == 0:
             PCA = [coordinate[0, :]]
         else:
-            PCA = np.concatenate((PCA, [coordinate[0, :]]), axis=0)
+            PCA = np.concatenate((PCA, [coordinate[0, :]]), axis=0, dtype=float)
 
     print("Done!!! \nShape of PCA feature: ", PCA.shape)
     return PCA

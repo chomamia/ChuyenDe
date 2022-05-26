@@ -8,10 +8,10 @@ HOG_C_GAMMA = 10
 HOG_C_KERNEL = 'poly'    # 'rbf' or 'linear' or 'poly'
 
 # PCA
-PCA_C = 20
-PCA_C_DEGREE = 1
+PCA_C = 10
+PCA_C_DEGREE = 2
 PCA_C_GAMMA = 10
-PCA_C_KERNEL = 'rbf'    # 'rbf' or 'linear' or 'poly'
+PCA_C_KERNEL = 'poly'    # 'rbf' or 'linear' or 'poly'
 
 # ANN
 HIDDEN_LAYER_1_SIZE = 128

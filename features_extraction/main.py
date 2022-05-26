@@ -1,6 +1,6 @@
 from modules_features_extraction import *
 
-N_COMPONENT = 3  # using for PCA
+N_COMPONENT = 50  # using for PCA
 
 # # # train # # #
 PATH_DATA = "../../dataset/data_argument_(80.0-20.0)/train/gray"
