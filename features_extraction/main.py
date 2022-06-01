@@ -22,6 +22,9 @@ if __name__ == "__main__":
     PCA_feature = PCA_fn(data, N_COMPONENT)
     np.savetxt(PATH_SAVE_MODEL_TRAIN + "/PCA_feature.txt", PCA_feature)
 
+    PCA_feature_all = PCA_all(data, N_COMPONENT)
+    np.savetxt(PATH_SAVE_MODEL_TRAIN + "/PCA_feature_all.txt", PCA_feature_all)
+
     HOG_feature = HOG_fn(data)
     np.savetxt(PATH_SAVE_MODEL_TRAIN + "/HOG_feature.txt", HOG_feature)
 
@@ -36,6 +39,9 @@ if __name__ == "__main__":
 
     PCA_feature = PCA_fn(data, N_COMPONENT)
     np.savetxt(PATH_SAVE_MODEL_TEST + "/PCA_feature.txt", PCA_feature)
+
+    PCA_feature_all = PCA_all(data, N_COMPONENT)
+    np.savetxt(PATH_SAVE_MODEL_TEST + "/PCA_feature_all.txt", PCA_feature_all)
 
     HOG_feature = HOG_fn(data)
     np.savetxt(PATH_SAVE_MODEL_TEST + "/HOG_feature.txt", HOG_feature)

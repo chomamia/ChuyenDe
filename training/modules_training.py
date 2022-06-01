@@ -11,9 +11,10 @@ from scipy.optimize import fmin_cg
 def load_feature(path):
     X_HOG = np.loadtxt(path + "/HOG_feature.txt")
     X_PCA = np.loadtxt(path + "/PCA_feature.txt")
+    X_PCA_all = np.loadtxt(path + "/PCA_feature_all.txt")
     Y = np.loadtxt(path + "/label.txt")
     print("Load feature done!!!")
-    return X_HOG, X_PCA, Y
+    return X_HOG, X_PCA, X_PCA_all, Y
 
 
 def randInitializeWeights(L_in, L_out):
@@ -184,12 +185,12 @@ def ANN(X_train, y_train, X_test, Y_test, N, hidden_layer1_size, hidden_layer2_s
     print('Done!!! \nTraining set Accuracy: %2.2f ' % (np.mean(p +1 == Y_test) * 100)+"%")
 
     # save the model to disk
-    filename = path_save + str(datetime.now()).replace(":", "_")+".sav"
+    filename = path_save +".sav"
     pickle.dump(model_trained, open(filename, 'wb'))
     
     print("Successful! Mode save at: "+os.path.abspath(filename))
 
-    return theta1, theta2, theta3, theta4
+    return theta1, theta2, theta3, theta4, p
 
 
 def SVM_fn(X_train, Y_train, filename,  c_kernel='poly', c_degree=2, c_gamma=10, c=10):
@@ -199,7 +200,7 @@ def SVM_fn(X_train, Y_train, filename,  c_kernel='poly', c_degree=2, c_gamma=10,
     svm.fit(X_train, Y_train)
 
     # save the model to disk
-    filename = filename + str(datetime.now()).replace(":", "_")+".sav"
+    filename = filename +".sav"
     pickle.dump(svm, open(filename, 'wb'))
 
     print("Mode save at: "+os.path.abspath(filename))

@@ -9,7 +9,7 @@ def sigmoid(z):
     return g
 
 
-def predict_ANN(X, theta1, theta2, theta3, theta4):
+def predict(X, theta1, theta2, theta3, theta4):
     # size
     m, n = X.shape
     num_labels = theta4.shape[0]

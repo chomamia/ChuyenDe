@@ -77,7 +77,7 @@ def PCA_all(X, n_component):
     # step6
     pca = np.dot(eigenvector_subset.T, X_meaned.T).T
     pca_restore = np.dot(eigenvector_subset, pca.T).T
-    return pca, pca_restore
+    return pca
 
 
 def HOG_fn(data_input):

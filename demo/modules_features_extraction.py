@@ -5,105 +5,39 @@ import numpy as np
 from scipy.linalg import eigh
 
 
-def load_data(path):
-    print("\nStep 1/3: Loading data...")
-    class_input = os.listdir(path)
-    num_image = 0
-    X = np.array([])
-    label = 1
-    Y = np.array([])
-    for c in class_input:
-        for i in os.listdir(path+"/"+c):
-            path_img = path + "/" + c + "/" + i
-            img = cv2.imread(path_img)
-            img = cv2.resize(img,(64,64))
-            img = np.reshape(img[:, :, 1], (1, -1))
-            if len(X) == 0:
-                X = [img[0, :]]
-                Y = [label]
-            else:
-                X = np.concatenate((X, [img[0, :]]), axis=0, dtype=float)
-                Y = np.concatenate((Y, [label]), axis=0)
-
-        label += 1
-
-    print("Done! \nShape of data: ", X.shape)
-    return X, Y
-
-
 def PCA_fn(data_input, n_component):
-    print("\nStep 2/3: PCA feature extraction...")
+
     n, size = data_input.shape
-    PCA = np.array([], dtype=float)
-    for i in range(n):
-        # Print process
-        print_loading(i, n, 10)
-
-        # tieu chuan hoa du lieu
-        X = np.reshape(data_input[i, :], [int(size**(1/2)), int(size**(1/2))])
-        component_col = n_component // X.shape[0] + 1
-        mean_X = np.mean(X, axis=0)
-        X_meaned = (X - mean_X)
-
-        # tinh toan ma tran hiep phuong sai
-        covar_matrix = np.cov(X_meaned, rowvar=True)
-
-        # tinh toan cac gia tri rieng va cac gia tri rieng cua ma tran hiep phuong sai
-        values, vectors = eigh(covar_matrix)
-        sorted_index = np.argsort(values)[::-1]
-        sorted_eigenvectors = vectors[:, sorted_index]
-        eigenvector_subnet = sorted_eigenvectors[:, 0:component_col]
-        X_reduced = np.dot(eigenvector_subnet.T, X_meaned).T
-        X_reduced = np.reshape(X_reduced, (1,-1))
-        coordinate = X_reduced[:, 0:n_component]
-        if len(PCA) == 0:
-            PCA = [coordinate[0, :]]
-        else:
-            PCA = np.concatenate((PCA, [coordinate[0, :]]), axis=0, dtype=float)
-
-    # print("Done!!! \nShape of PCA feature: ", PCA.shape)
-    return np.array(PCA)
-
-
-def PCA_all(X, n_component):
+    # tieu chuan hoa du lieu
+    X = np.reshape(data_input, [int(size**(1/2)), int(size**(1/2))])
+    component_col = n_component // X.shape[0] + 1
     mean_X = np.mean(X, axis=0)
-    X_meaned = X - mean_X
-    covar_matrix = np.cov(X_meaned.T, rowvar=True)
-    values, vectors = eigh(covar_matrix.T)
+    X_meaned = (X - mean_X)
+    # tinh toan ma tran hiep phuong sai
+    covar_matrix = np.cov(X_meaned, rowvar=True)
+    # tinh toan cac gia tri rieng va cac gia tri rieng cua ma tran hiep phuong sai
+    values, vectors = eigh(covar_matrix)
     sorted_index = np.argsort(values)[::-1]
     sorted_eigenvectors = vectors[:, sorted_index]
-    # step5
-    eigenvector_subset = sorted_eigenvectors[:, 0:n_component]
-    # step6
-    pca = np.dot(eigenvector_subset.T, X_meaned.T).T
-    pca_restore = np.dot(eigenvector_subset, pca.T).T
-    return pca, pca_restore
+    eigenvector_subnet = sorted_eigenvectors[:, 0:component_col]
+    X_reduced = np.dot(eigenvector_subnet.T, X_meaned).T
+    X_reduced = np.reshape(X_reduced, (1, -1))
+    coordinate = X_reduced[:, 0:n_component]
+    print(coordinate.shape)
+    return coordinate
 
 
 def HOG_fn(data_input):
-    print("\nStep 3/3: HOG feature extraction...")
     n, size = data_input.shape
     HOG = np.array([])
-    for i in range(n):
-        # Print process
-        print_loading(i, n, 10)
-
-        X = np.reshape(data_input[i, :], [int(size ** (1 / 2)), int(size ** (1 / 2))])
-        rows, columns = X.shape
-        # img = np.reshape(X[i, :], (64, 64))
-        gama, theta = calculator_mapping(X)
-        cell = calculator_cell(gama, theta)
-        # print("size of cell: ", cell.shape)
-        block = calculator_block(cell)
-        block = np.reshape(block, (1, -1))
-        # print("size of block: ", block.shape)
-        if len(HOG) == 0:
-            HOG = [block[0, :]]
-        else:
-            HOG = np.concatenate((HOG, [block[0, :]]), axis=0)
-
-    # print("Done!!! \nShape of HOG feature: ", HOG.shape)
-    return np.array(HOG)
+    # Print process
+    X = np.reshape(data_input, [int(size ** (1 / 2)), int(size ** (1 / 2))])
+    gama, theta = calculator_mapping(X)
+    cell = calculator_cell(gama, theta)
+    block = calculator_block(cell)
+    block = np.reshape(block, (1, -1))
+    print(block.shape)
+    return block
 
 
 def calculator_cell(gama, theta):
