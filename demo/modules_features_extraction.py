@@ -61,8 +61,8 @@ def PCA_fn(data_input, n_component):
         else:
             PCA = np.concatenate((PCA, [coordinate[0, :]]), axis=0, dtype=float)
 
-    print("Done!!! \nShape of PCA feature: ", PCA.shape)
-    return PCA
+    # print("Done!!! \nShape of PCA feature: ", PCA.shape)
+    return np.array(PCA)
 
 
 def PCA_all(X, n_component):
@@ -102,8 +102,8 @@ def HOG_fn(data_input):
         else:
             HOG = np.concatenate((HOG, [block[0, :]]), axis=0)
 
-    print("Done!!! \nShape of HOG feature: ", HOG.shape)
-    return HOG
+    # print("Done!!! \nShape of HOG feature: ", HOG.shape)
+    return np.array(HOG)
 
 
 def calculator_cell(gama, theta):

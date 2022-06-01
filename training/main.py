@@ -11,7 +11,7 @@ HOG_C_KERNEL = 'poly'    # 'rbf' or 'linear' or 'poly'
 PCA_C = 20
 PCA_C_DEGREE = 2
 PCA_C_GAMMA = 10
-PCA_C_KERNEL = 'rbf'    # 'rbf' or 'linear' or 'poly'
+PCA_C_KERNEL = 'poly'    # 'rbf' or 'linear' or 'poly'
 
 # ANN - HOG
 HIDDEN_LAYER_1_SIZE = 128
