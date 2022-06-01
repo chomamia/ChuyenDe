@@ -34,35 +34,38 @@ def PCA_fn(data_input, n_component):
     print("\nStep 2/3: PCA feature extraction...")
     n, size = data_input.shape
     PCA = np.array([], dtype=float)
-    # for i in range(n):
-    #     # Print process
-    #     print_loading(i, n, 10)
+    for i in range(n):
+        # Print process
+        print_loading(i, n, 10)
 
-    #     # tieu chuan hoa du lieu
-    #     X = np.reshape(data_input[i, :], [int(size**(1/2)), int(size**(1/2))])
-    #     component_col = n_component // X.shape[0] + 1
-    #     mean_X = np.mean(X, axis=0)
-    #     X_meaned = (X - mean_X) 
+        # tieu chuan hoa du lieu
+        X = np.reshape(data_input[i, :], [int(size**(1/2)), int(size**(1/2))])
+        component_col = n_component // X.shape[0] + 1
+        mean_X = np.mean(X, axis=0)
+        X_meaned = (X - mean_X) 
 
-    #     # tinh toan ma tran hiep phuong sai
-    #     covar_matrix = np.cov(X_meaned, rowvar=False)
+        # tinh toan ma tran hiep phuong sai
+        covar_matrix = np.cov(X_meaned, rowvar=False)
 
-    #     # tinh toan cac gia tri rieng va cac gia tri rieng cua ma tran hiep phuong sai
-    #     values, vectors = eigh(covar_matrix)
-    #     sorted_index = np.argsort(values)[::-1]
-    #     sorted_eigenvectors = vectors[:, sorted_index]
+        # tinh toan cac gia tri rieng va cac gia tri rieng cua ma tran hiep phuong sai
+        values, vectors = eigh(covar_matrix)
+        sorted_index = np.argsort(values)[::-1]
+        sorted_eigenvectors = vectors[:, sorted_index]
 
-    #     eigenvector_subnet = sorted_eigenvectors[:, 0:component_col]
+        eigenvector_subnet = sorted_eigenvectors[:, 0:component_col]
 
-    #     X_reduced = np.dot(eigenvector_subnet.T, X_meaned).T
-    #     X_reduced = np.reshape(X_reduced, (1,-1))
+        X_reduced = np.dot(eigenvector_subnet.T, X_meaned).T
+        X_reduced = np.reshape(X_reduced, (1,-1))
 
-    #     coordinate = X_reduced[:, 0:n_component]
+        coordinate = X_reduced[:, 0:n_component]
 
-    #     if len(PCA) == 0:
-    #         PCA = [coordinate[0, :]]
-    #     else:
-    #         PCA = np.concatenate((PCA, [coordinate[0, :]]), axis=0, dtype=float)
+        if len(PCA) == 0:
+            if n == 1:
+                PCA = np.array(coordinate)
+            else:
+                PCA = [coordinate[0, :]]
+        else:
+            PCA = np.concatenate((PCA, [coordinate[0, :]]), axis=0, dtype=float)
 
     mean_X = np.mean(data_input, axis=0)
     X = data_input - mean_X
@@ -74,12 +77,8 @@ def PCA_fn(data_input, n_component):
 def HOG_fn(data_input):
     print("\nStep 3/3: HOG feature extraction...")
     n, size = data_input.shape
-    HOG = np.array([])
-    for i in range(n):
-        # Print process
-        print_loading(i, n, 10)
-
-        X = np.reshape(data_input[i, :], [int(size ** (1 / 2)), int(size ** (1 / 2))])
+    if n == 1:
+        X = np.reshape(data_input[:], [int(size ** (1 / 2)), int(size ** (1 / 2))])
         rows, columns = X.shape
         # img = np.reshape(X[i, :], (64, 64))
         gama, theta = calculator_mapping(X)
@@ -87,11 +86,26 @@ def HOG_fn(data_input):
         # print("size of cell: ", cell.shape)
         block = calculator_block(cell)
         block = np.reshape(block, (1, -1))
-        # print("size of block: ", block.shape)
-        if len(HOG) == 0:
-            HOG = [block[0, :]]
-        else:
-            HOG = np.concatenate((HOG, [block[0, :]]), axis=0)
+        HOG = block[0][:].reshape(1,-1)
+    else:
+        HOG = np.array([])
+        for i in range(n):
+            # Print process
+            print_loading(i, n, 10)
+
+            X = np.reshape(data_input[i, :], [int(size ** (1 / 2)), int(size ** (1 / 2))])
+            rows, columns = X.shape
+            # img = np.reshape(X[i, :], (64, 64))
+            gama, theta = calculator_mapping(X)
+            cell = calculator_cell(gama, theta)
+            # print("size of cell: ", cell.shape)
+            block = calculator_block(cell)
+            block = np.reshape(block, (1, -1))
+            # print("size of block: ", block.shape)
+            if len(HOG) == 0:
+                HOG = [block[0, :],]
+            else:
+                HOG = np.concatenate((HOG, [block[0, :]]), axis=0)
 
     print("Done!!! \nShape of HOG feature: ", HOG.shape)
     return HOG

@@ -54,13 +54,13 @@ def rgb2gray_fn(img):
 
 
 # resize image
-def resize_fn(img, size):
+def resize_fn(img, size=[64,64]):
     imgScale = cv2.resize(img, size, interpolation=cv2.INTER_LINEAR)
     return imgScale
 
 
 # crop image
-def crop_fn(img, buffer):
+def crop_fn(img, buffer=50):
     img = fix(img, buffer)
     img_crop = crop(img, 1)
     img_square = square(img_crop)

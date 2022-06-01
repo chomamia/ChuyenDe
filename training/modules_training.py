@@ -125,6 +125,7 @@ def nncnnCostFunction(nn_params, input_layer_size, hidden_layer1_size, hidden_la
 
 def predict(theta1, theta2, theta3, theta4, X):
     # size
+    print(X.shape)
     m, n = X.shape
     num_labels = theta4.shape[0]
     # add ones to X data matrix
@@ -189,7 +190,7 @@ def ANN(X_train, y_train, X_test, Y_test, N, hidden_layer1_size, hidden_layer2_s
     
     print("Successful! Mode save at: "+os.path.abspath(filename))
 
-    return theta1, theta2, theta3, theta4
+    return theta1, theta2, theta3, theta4, p+1
 
 
 def SVM_fn(X_train, Y_train, filename,  c_kernel='poly', c_degree=2, c_gamma=10, c=10):
