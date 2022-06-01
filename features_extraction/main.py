@@ -3,10 +3,10 @@ from modules_features_extraction import *
 N_COMPONENT = 50  # using for PCA
 
 # # # train # # #
-PATH_DATA_TRAIN = "../../dataset/data_argument_(80.0-20.0)_2022-06-01 09_49_48.750022/train/gray"
+PATH_DATA_TRAIN = "D:/Chuyen_de/Dataset/gray/train"
 PATH_SAVE_MODEL_TRAIN = "../../output_data_train"
 # # # test # # #
-PATH_DATA_TEST = "../../dataset/data_argument_(80.0-20.0)_2022-06-01 09_49_48.750022/test/gray"
+PATH_DATA_TEST = "D:/Chuyen_de/Dataset/gray/test"
 PATH_SAVE_MODEL_TEST = "../../output_data_test"
 
 if __name__ == "__main__":
