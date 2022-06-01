@@ -149,8 +149,9 @@ def predict(theta1, theta2, theta3, theta4, X):
     return p
 
 
-def ANN(X_train, y_train, hidden_layer1_size, hidden_layer2_size, hidden_layer3_size, number_labels):
-
+def ANN(X_train, y_train, X_test, Y_test, N, hidden_layer1_size, hidden_layer2_size, hidden_layer3_size, number_labels,path_save = "../"):
+    print("Training ANN ...")
+    print("____initializing...")
     input_layer_size = X_train.shape[1]
     theta1 = randInitializeWeights(input_layer_size, hidden_layer1_size)
     theta2 = randInitializeWeights(hidden_layer1_size, hidden_layer2_size)
@@ -165,8 +166,8 @@ def ANN(X_train, y_train, hidden_layer1_size, hidden_layer2_size, hidden_layer3_
                                        hidden_layer3_size, number_labels, X_train, y_train, lamb=1)[0]
     grad = lambda x: nncnnCostFunction(x, input_layer_size, hidden_layer1_size, hidden_layer2_size,
                                        hidden_layer3_size, number_labels, X_train, y_train, lamb=1)[1]
-
-    nn_params = fmin_cg(cost, init_nn_params, fprime=grad, maxiter=500, disp=False)
+    print("____training...")
+    nn_params = fmin_cg(cost, init_nn_params, fprime=grad, maxiter=N, disp=False)
     theta1 = np.reshape(nn_params[0: hidden_layer1_size * (input_layer_size + 1)],
                         (hidden_layer1_size, input_layer_size+1), order='F')
     theta2 = np.reshape(nn_params[hidden_layer1_size * (input_layer_size + 1): hidden_layer1_size * (input_layer_size + 1 ) + hidden_layer2_size * (hidden_layer1_size+1)],
@@ -176,9 +177,18 @@ def ANN(X_train, y_train, hidden_layer1_size, hidden_layer2_size, hidden_layer3_
                         (hidden_layer3_size, hidden_layer2_size + 1), order='F')
     theta4 = np.reshape(nn_params[a + hidden_layer3_size * (hidden_layer2_size+1): a + hidden_layer3_size * (hidden_layer2_size + 1)+(hidden_layer3_size+1) * number_labels],
                         (number_labels, hidden_layer3_size + 1), order='F')
+    print("____saving model...")
+    model_trained = (theta1, theta2, theta3, theta4)
+
+    p = predict(theta1, theta2, theta3, theta4, X_test)
+    print('Done!!! \nTraining set Accuracy: %2.2f ' % (np.mean(p +1 == Y_test) * 100)+"%")
+
+    # save the model to disk
+    filename = path_save + str(datetime.now()).replace(":", "_")+".sav"
+    pickle.dump(model_trained, open(filename, 'wb'))
     
-    # p = predict(theta1, theta2, theta3, theta4, X_test)
-    # print('Training set Accuracy: %2.2f ' % (np.mean(p +1 == y_test) * 100)+"%")
+    print("Successful! Mode save at: "+os.path.abspath(filename))
+
     return theta1, theta2, theta3, theta4
 
 
@@ -192,7 +202,7 @@ def SVM_fn(X_train, Y_train, filename,  c_kernel='poly', c_degree=2, c_gamma=10,
     filename = filename + str(datetime.now()).replace(":", "_")+".sav"
     pickle.dump(svm, open(filename, 'wb'))
 
-    print("Successful! Mode save at: "+os.path.abspath(filename))
+    print("Mode save at: "+os.path.abspath(filename))
     return(svm)
 
 

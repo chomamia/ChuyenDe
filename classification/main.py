@@ -1,5 +1,8 @@
 from modules_classification import *
 
+INPUT_IMAGE = ""
+# INPUT_FEATURE = 
+
 """ FEATURE_EXTRACTION_METHOD
     1: HOG (Histogram of Oriented Gradient)
     2: PCA (Principal Component Analysis)
